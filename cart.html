@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Axiom | Cart</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        AXIOM
+    </div>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="products.html">Products</a>
+        <a href="sell.html">Sell</a>
+        <a href="cart.html">Cart 🛒</a>
+    </nav>
+
+</header>
+
+
+<section class="featured">
+
+<h2>
+Your Cart
+</h2>
+
+
+<div id="cart-items"></div>
+
+
+</section>
+
+<script>
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+let container = document.getElementById("cart-items");
+
+function displayCart() {
+
+    container.innerHTML = "";
+
+    if (cart.length === 0) {
+
+        container.innerHTML = "<h3>Your cart is empty.</h3>";
+
+    } else {
+
+      cart.forEach((item, index) => {
+
+    container.insertAdjacentHTML("beforeend", `
+                <div class="product-card">
+
+                    <img src="${item.image}">
+
+                    <h3>${item.name}</h3>
+
+                    <h2>$${(item.price * (item.quantity || 1)).toFixed(2)}</h2>
+
+                    <button onclick="decrease(${index})">-</button>
+
+                    <span>${item.quantity || 1}</span>
+
+                    <button onclick="increase(${index})">+</button>
+
+                    <br><br>
+
+                    <button onclick="removeItem(${index})">
+                        Remove
+                    </button>
+
+                    <br><br>
+
+                    <button>
+                        Checkout
+                    </button>
+                </div>
+             `);
+
+        });
+
+    }
+
+}
+function increase(index) {
+
+    
+    cart[index].quantity = (cart[index].quantity || 1) + 1;
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    displayCart();
+
+}
+
+
+
+
+function decrease(index) {
+
+    if ((cart[index].quantity || 1) > 1) {
+
+        cart[index].quantity--;
+
+        localStorage.setItem("cart", JSON.stringify(cart));
+
+        location.reload();
+
+    }
+
+}
+
+
+function removeItem(index) {
+
+    cart.splice(index, 1);
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    displayCart();
+
+}
+
+
+displayCart();
+
+
+</script>
+</body>
+</html>
